@@ -37,3 +37,4 @@ if($release -eq $true) {
 
 & cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" -B build
 & cmake --build ./build
+exit $LASTEXITCODE
