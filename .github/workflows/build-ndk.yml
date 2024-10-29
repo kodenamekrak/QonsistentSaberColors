@@ -36,12 +36,9 @@ jobs:
           submodules: true
           lfs: true
       - uses: seanmiddleditch/gha-setup-ninja@v3
-      - name: Setup canary NDK
-        id: setup-ndk
-        uses: ./.github/actions/canary-ndk
       - name: Create ndkpath.txt
         run: >
-          echo ${{ steps.setup-ndk.outputs.ndk-path }} >
+          echo $ANDROID_NDK_HOME >
           ${GITHUB_WORKSPACE}/ndkpath.txt
 
           cat ${GITHUB_WORKSPACE}/ndkpath.txt
