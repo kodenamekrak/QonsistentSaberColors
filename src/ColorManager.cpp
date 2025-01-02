@@ -51,13 +51,13 @@ namespace QonsistentSaberColors {
         return colorSchemesSettings->GetSelectedColorScheme()->saberBColor;
     }
 
-    UnityEngine::Color get_LaserColor()
+    UnityEngine::Color get_LaserColor(const UnityEngine::Color& leftColor = get_LeftColor(), const UnityEngine::Color& rightColor = get_RightColor())
     {
         if(!inputModule || !getModConfig().Enabled.GetValue() || !getModConfig().ColoredLasers.GetValue())
             return defaultLaserColor;
         
         auto parent = inputModule->_vrPointer->_laserPointer->transform->parent->parent->name;
-        return parent == "ControllerLeft" ? get_LeftColor() : get_RightColor();
+        return parent == "ControllerLeft" ? leftColor : rightColor;
     }
 
     void UpdatePointers()
@@ -102,21 +102,21 @@ namespace QonsistentSaberColors {
         }
     }
 
-    void UpdateControllerColors()
+    void UpdateControllerColors(const UnityEngine::Color& leftColor, const UnityEngine::Color& rightColor)
     {
         if(!inputModule || !colorSchemesSettings)
             return;
 
-        SetControllerColor(inputModule->_vrPointer->_leftVRController, get_LeftColor());
-        SetControllerColor(inputModule->_vrPointer->_rightVRController, get_RightColor());
+        SetControllerColor(inputModule->_vrPointer->_leftVRController, leftColor);
+        SetControllerColor(inputModule->_vrPointer->_rightVRController, rightColor);
     }
 
-    void UpdateLaserColor()
+    void UpdateLaserColor(const UnityEngine::Color& leftColor, const UnityEngine::Color& rightColor)
     {
         if(!inputModule)
             return;
 
-        UnityEngine::Color color = get_LaserColor();
+        UnityEngine::Color color = get_LaserColor(leftColor, rightColor);
         color.a = 0;
 
         SetLaserColor(inputModule->_vrPointer->_laserPointer, color);

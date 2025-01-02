@@ -6,6 +6,8 @@
 #include "GlobalNamespace/MainMenuViewController.hpp"
 #include "GlobalNamespace/ColorsOverrideSettingsPanelController.hpp"
 #include "GlobalNamespace/MenuEnvironmentManager.hpp"
+#include "GlobalNamespace/EnvironmentColorManager.hpp"
+#include "GlobalNamespace/ColorScheme.hpp"
 
 #include "VRUIControls/VRPointer.hpp"
 
@@ -15,14 +17,20 @@ static modloader::ModInfo modInfo {MOD_ID, VERSION, 0};
 
 using namespace QonsistentSaberColors;
 
-inline void UpdateColors()
+inline void UpdateColors(const UnityEngine::Color& leftColor = get_LeftColor(), const UnityEngine::Color& rightColor = get_RightColor())
 {
     if(getModConfig().Enabled.GetValue())
     {
-        UpdateControllerColors();
+        UpdateControllerColors(leftColor, rightColor);
         if(getModConfig().ColoredLasers.GetValue())
-            UpdateLaserColor();
+            UpdateLaserColor(leftColor, rightColor);
     }
+}
+
+MAKE_HOOK_MATCH(EnvironmentColorManager_InitColors, &GlobalNamespace::EnvironmentColorManager::InitColors, void, GlobalNamespace::EnvironmentColorManager* self)
+{
+    EnvironmentColorManager_InitColors(self);
+    UpdateColors(self->_colorScheme->get_saberAColor(), self->_colorScheme->get_saberBColor());
 }
 
 MAKE_HOOK_MATCH(VRPointer_CreateLaserPointerAndLaserHit, &VRUIControls::VRPointer::RefreshLaserPointerAndLaserHit, void, VRUIControls::VRPointer* self, UnityEngine::EventSystems::PointerEventData* pointerData)
@@ -82,6 +90,7 @@ MOD_EXPORT void late_load() {
     BSML::Register::RegisterMainMenu<QonsistentSaberColors::SettingsViewController*>("QonsistentSaberColors", "QonsistentSaberColors", "QonsistentSaberColors mod settings");
 
     INFO("Installing hooks...");
+    INSTALL_HOOK(Logger, EnvironmentColorManager_InitColors);
     INSTALL_HOOK(Logger, VRPointer_CreateLaserPointerAndLaserHit);
     INSTALL_HOOK(Logger, MainMenuViewController_DidActivate);
     INSTALL_HOOK(Logger, ColorsOverrideSettingsPanelController_HandleOverrideColorsToggleValueChanged);
