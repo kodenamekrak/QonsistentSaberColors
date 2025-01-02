@@ -9,7 +9,7 @@
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 #include "beatsaber-hook/shared/utils/hooking.hpp"
 
-static constexpr auto Logger = Paper::ConstLoggerContext("QonsistentSaberColors");
+inline constexpr auto Logger = Paper::ConstLoggerContext("QonsistentSaberColors");
 
 #define INFO(message, ...) Logger.info(message, ## __VA_ARGS__)
 
