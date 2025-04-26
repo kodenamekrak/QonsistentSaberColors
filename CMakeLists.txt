@@ -105,3 +105,10 @@ add_custom_command(TARGET ${COMPILE_ID} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${a_file} debug/${file}
         COMMENT "Copy a files for ndk stack")
         endforeach()
+
+
+RECURSE_FILES(src_inline_hook_beatsaber_hook_local_extra_c ${EXTERN_DIR}/includes/beatsaber-hook/shared/inline-hook/*.c)
+RECURSE_FILES(src_inline_hook_beatsaber_hook_local_extra_cpp ${EXTERN_DIR}/includes/beatsaber-hook/shared/inline-hook/*.cpp)
+
+target_sources(${COMPILE_ID} PRIVATE ${src_inline_hook_beatsaber_hook_local_extra_c})
+target_sources(${COMPILE_ID} PRIVATE ${src_inline_hook_beatsaber_hook_local_extra_cpp})
