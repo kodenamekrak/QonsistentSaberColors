@@ -36,8 +36,7 @@ MAKE_HOOK_MATCH(EnvironmentColorManager_InitColors, &GlobalNamespace::Environmen
 MAKE_HOOK_MATCH(VRPointer_CreateLaserPointerAndLaserHit, &VRUIControls::VRPointer::RefreshLaserPointerAndLaserHit, void, VRUIControls::VRPointer* self, UnityEngine::EventSystems::PointerEventData* pointerData)
 {
     VRPointer_CreateLaserPointerAndLaserHit(self, pointerData);
-    if(getModConfig().Enabled.GetValue() && getModConfig().ColoredLasers.GetValue())
-        UpdateLaserColor();
+    UpdateLaserColor();
 }
 
 MAKE_HOOK_MATCH(MainMenuViewController_DidActivate, &GlobalNamespace::MainMenuViewController::DidActivate, void, GlobalNamespace::MainMenuViewController* self, bool a, bool b, bool c)
